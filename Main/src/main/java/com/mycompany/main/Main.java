@@ -4,7 +4,7 @@
 
 package com.mycompany.main;
 
-import model.Trie;
+import com.mycompany.model.Trie;
 
 /**
  *
@@ -14,31 +14,33 @@ public class Main {
 
     public static void main(String[] args) {
         Trie trie = new Trie();
-
-        System.out.println(trie.isEmpty());
-
-        trie.insert("Programming");
-        trie.insert("is");
-        trie.insert("a");
-        trie.insert("way");
-        trie.insert("of");
-        trie.insert("life");
+        
+        System.out.println("trie.isEmpty(): "+trie.isEmpty());
+        System.out.println("\nINSERTAR PALABRA"); // Modificar impresion
+        trie.insert("Tres");
+        trie.insert("tristes");
+        trie.insert("tigres");
+        trie.insert("tragan");
+        trie.insert("trigo");
+        trie.insert("en");
+        trie.insert("un");
+        trie.insert("trigal");
 
         System.out.println("");
-        System.out.println(trie);
+        System.out.println("trie: "+trie);
         
         System.out.println("");
-        System.out.println(trie.isEmpty()); // Otro metodo para comprobar que el arbol sea vacio
+        System.out.println("trie.isEmpty(): "+trie.isEmpty()); // Otro metodo para comprobar que el arbol sea vacio
         
-        System.out.println("");
-        System.out.println(trie.containsNode("3"));
-        System.out.println(trie.containsNode("vida"));
-        System.out.println(trie.containsNode("life"));
+        System.out.println("\nBUSCAR PALABRA");
+        System.out.println("trie.containsNode(\"7\"): "+trie.containsNode("7"));
+        System.out.println("trie.containsNode(\"hola\"): "+trie.containsNode("hola"));
+        System.out.println("trie.containsNode(\"tigres\"): "+trie.containsNode("tigres"));
 
-        System.out.println("");
-        System.out.println(trie.containsNode("Programming"));
-        trie.delete("Programming");
-        System.out.println(trie.containsNode("Programming"));
+        System.out.println("\nELIMINAR");
+        System.out.println("trie.containsNode(\"Tres\"): "+trie.containsNode("Tres"));
+        trie.delete("Tres"); // Validar que no elimine si no existe la palabra
+        System.out.println("trie.containsNode(\"Tres\"): "+trie.containsNode("Tres"));
     }
     
 }
