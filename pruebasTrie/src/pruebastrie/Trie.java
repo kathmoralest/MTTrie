@@ -25,6 +25,18 @@ public class Trie {
         root = new TrieNode();
     }
 
+    public TrieNode getRoot() {
+        return root;
+    }
+
+    public void setRoot(TrieNode root) {
+        this.root = root;
+    }
+    
+    public void clean() {
+        root = new TrieNode();
+    }
+
     public void insert(String word) {
         TrieNode current = root;
         for (char c : word.toCharArray()) {

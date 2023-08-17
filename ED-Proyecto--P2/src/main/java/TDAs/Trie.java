@@ -9,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -41,7 +43,7 @@ public class Trie {
             current.getChildren().putIfAbsent(c, new TrieNode());
             current = current.getChildren().get(c);
         }
-        current.setEndOfWord(true) ;
+        current.setEndOfWord(true);
     }
 
     public boolean search(String word) {
@@ -162,34 +164,38 @@ public class Trie {
             generateDot(childNode, prefix + key, writer);
         }
     }
-        
-    public void generateDotFileByLevels(String dotFilePath) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(dotFilePath))) {
-            writer.println("digraph TrieByLevels {");
-            writer.println("  node [shape=box];");
 
-            generateDotNodeByLevels(writer, root, "ROOT");
+    public List<String> autocomplete(String prefix) {
+        List<String> suggestions = new ArrayList<>();
+        TrieNode lastNode = findLastNodeOf(prefix);
 
-            writer.println("}");
-            System.out.println("Archivo DOT generado: " + dotFilePath);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (lastNode != null) {
+            autocompleteFromNode(lastNode, prefix, suggestions);
         }
+
+        return suggestions;
     }
-    
-    private void generateDotNodeByLevels(PrintWriter writer, TrieNode node, String nodeName) {
+
+    private TrieNode findLastNodeOf(String prefix) {
+        TrieNode current = root;
+        for (char c : prefix.toCharArray()) {
+            if (!current.getChildren().containsKey(c)) {
+                return null;
+            }
+            current = current.getChildren().get(c);
+        }
+        return current;
+    }
+
+    private void autocompleteFromNode(TrieNode node, String currentWord, List<String> suggestions) {
         if (node.isEndOfWord()) {
-            writer.println("  \"" + nodeName + "\" [label=\"" + nodeName + "\", shape=doublecircle];");
-        } else {
-            writer.println("  \"" + nodeName + "\";");
+            suggestions.add(currentWord);
         }
 
         for (Map.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
             char key = entry.getKey();
             TrieNode childNode = entry.getValue();
-            String childName = nodeName + key;
-            writer.println("  \"" + nodeName + "\" -> \"" + childName + "\" [label=\"" + key + "\"];");
-            generateDotNodeByLevels(writer, childNode, childName);
+            autocompleteFromNode(childNode, currentWord + key, suggestions);
         }
     }
 }

@@ -12,9 +12,9 @@ import java.util.Map;
  * @author Kathy Morales
  */
 public class TrieNode {
-    private Map<Character, TrieNode> children = new HashMap<>();
+    private Map<Character, TrieNode> children;
     private boolean endOfWord;
-
+    
     public TrieNode() {
         children = new HashMap<>();
         endOfWord = false;
@@ -30,6 +30,5 @@ public class TrieNode {
 
     public void setEndOfWord(boolean endOfWord) {
         this.endOfWord = endOfWord;
-    }  
+    } 
 }
-
