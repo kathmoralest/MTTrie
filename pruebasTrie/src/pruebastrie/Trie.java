@@ -40,21 +40,21 @@ public class Trie {
     public void insert(String word) {
         TrieNode current = root;
         for (char c : word.toCharArray()) {
-            current.children.putIfAbsent(c, new TrieNode());
-            current = current.children.get(c);
+            current.getChildren().putIfAbsent(c, new TrieNode());
+            current = current.getChildren().get(c);
         }
-        current.isEndOfWord = true;
+        current.setEndOfWord(true);
     }
 
     public boolean search(String word) {
         TrieNode current = root;
         for (char c : word.toCharArray()) {
-            if (!current.children.containsKey(c)) {
+            if (!current.getChildren().containsKey(c)) {
                 return false;
             }
-            current = current.children.get(c);
+            current = current.getChildren().get(c);
         }
-        return current.isEndOfWord;
+        return current.isEndOfWord();
     }
     
     public void delete(String word) {
@@ -63,17 +63,17 @@ public class Trie {
     
     private boolean delete(TrieNode current, String word, int index) {
         if (index == word.length()) {
-            if (!current.isEndOfWord) {
+            if (!current.isEndOfWord()) {
                 return false; // La palabra no está en el Trie
             }
-            current.isEndOfWord = false; // Marcar como no final de palabra
+            current.setEndOfWord(false); // Marcar como no final de palabra
 
             // Si el nodo no tiene más hijos y no es el final de otra palabra, se puede eliminar
-            return current.children.isEmpty();
+            return current.getChildren().isEmpty();
         }
 
         char c = word.charAt(index);
-        TrieNode child = current.children.get(c);
+        TrieNode child = current.getChildren().get(c);
         if (child == null) {
             return false; // La palabra no está en el Trie
         }
@@ -81,9 +81,9 @@ public class Trie {
         boolean shouldDeleteChild = delete(child, word, index + 1);
 
         if (shouldDeleteChild) {
-            current.children.remove(c);
+            current.getChildren().remove(c);
             // Si el nodo no tiene más hijos y no es el final de otra palabra, se puede eliminar
-            return current.children.isEmpty() && !current.isEndOfWord;
+            return current.getChildren().isEmpty() && !current.isEndOfWord();
         }
 
         return false;
@@ -111,11 +111,11 @@ public class Trie {
     }
     
     private void saveToFile(TrieNode node, String prefix, PrintWriter writer) {
-        if (node.isEndOfWord) {
+        if (node.isEndOfWord()) {
             writer.println(prefix);
         }
 
-        for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+        for (Map.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
             char key = entry.getKey();
             TrieNode childNode = entry.getValue();
             saveToFile(childNode, prefix + key, writer);
@@ -128,17 +128,16 @@ public class Trie {
     }
     
     private void printTrie(TrieNode node, String prefix) {
-        if (node.isEndOfWord) {
+        if (node.isEndOfWord()) {
             System.out.println(prefix);
         }
 
-        for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+        for (Map.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
             char key = entry.getKey();
             TrieNode childNode = entry.getValue();
             printTrie(childNode, prefix + key);
         }
     }
-    
     public void generateDotFile(String filename) {
         try {
             FileWriter writer = new FileWriter(filename);
@@ -152,12 +151,12 @@ public class Trie {
         }
     }
 
-        private void generateDot(TrieNode node, String prefix, FileWriter writer) throws IOException {
-        if (node.isEndOfWord) {
+    public void generateDot(TrieNode node, String prefix, FileWriter writer) throws IOException {
+        if (node.isEndOfWord()) {
             writer.write("\"" + prefix + "\" [shape=box];\n");
         }
 
-        for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+        for (Map.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
             char key = entry.getKey();
             TrieNode childNode = entry.getValue();
             writer.write("\"" + prefix + "\" -> \"" + prefix + key + "\" [label=\"" + key + "\"];\n");
@@ -165,6 +164,7 @@ public class Trie {
         }
     }
 
+    
     public List<String> autocomplete(String prefix) {
         List<String> suggestions = new ArrayList<>();
         TrieNode lastNode = findLastNodeOf(prefix);
@@ -179,20 +179,20 @@ public class Trie {
     private TrieNode findLastNodeOf(String prefix) {
         TrieNode current = root;
         for (char c : prefix.toCharArray()) {
-            if (!current.children.containsKey(c)) {
+            if (!current.getChildren().containsKey(c)) {
                 return null;
             }
-            current = current.children.get(c);
+            current = current.getChildren().get(c);
         }
         return current;
     }
 
     private void autocompleteFromNode(TrieNode node, String currentWord, List<String> suggestions) {
-        if (node.isEndOfWord) {
+        if (node.isEndOfWord()) {
             suggestions.add(currentWord);
         }
 
-        for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+        for (Map.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
             char key = entry.getKey();
             TrieNode childNode = entry.getValue();
             autocompleteFromNode(childNode, currentWord + key, suggestions);

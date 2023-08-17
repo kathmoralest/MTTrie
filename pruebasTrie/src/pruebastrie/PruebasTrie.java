@@ -5,6 +5,7 @@
 package pruebastrie;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,17 +29,6 @@ public class PruebasTrie {
         
         // Insertar palabra en el Trie       
         trie.insert("batman");
-        
-        
-        // Insertar palabras ingresadas por el usuario
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese una palabra (o 'salir' para detenerse): ");
-        String input = scanner.nextLine();
-        while (!input.equalsIgnoreCase("salir")) {
-            trie.insert(input);
-            System.out.print("Ingrese otra palabra (o 'salir' para detenerse): ");
-            input = scanner.nextLine();
-        }
         
         // Guardar el diccionario en el archivo
         trie.saveToFile(dictionaryFile);
@@ -66,6 +56,8 @@ public class PruebasTrie {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        
+        
 
         // Eliminar una palabra
         String wordToDelete = "apple";
@@ -74,6 +66,16 @@ public class PruebasTrie {
         // Después de la eliminación
         System.out.println("Después de la eliminación de '" + wordToDelete + "':");
         trie.printTrie();
+        
+        // Insertar palabras ingresadas por el usuario
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese una palabra (o 'salir' para detenerse): ");
+        String input = scanner.nextLine();
+        while (!input.equalsIgnoreCase("salir")) {
+            trie.insert(input);
+            System.out.print("Ingrese otra palabra (o 'salir' para detenerse): ");
+            input = scanner.nextLine();
+        }
         
         System.out.print("Ingrese una palabra para buscar: ");
         String searchWord = scanner.nextLine();
@@ -92,10 +94,6 @@ public class PruebasTrie {
             System.out.println(suggestion);
         }
         
-    }
-    
-    public static void generarImagen(){
-    
     }
     
 }

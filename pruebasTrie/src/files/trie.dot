@@ -6,6 +6,11 @@ digraph Trie {
 "app" -> "appl" [label="l"];
 "appl" -> "apple" [label="e"];
 "apple" [shape=box];
+"" -> "r" [label="r"];
+"r" -> "ri" [label="i"];
+"ri" -> "ric" [label="c"];
+"ric" -> "rice" [label="e"];
+"rice" [shape=box];
 "" -> "b" [label="b"];
 "b" -> "ba" [label="a"];
 "ba" -> "bat" [label="t"];

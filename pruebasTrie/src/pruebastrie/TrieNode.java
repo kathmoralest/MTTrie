@@ -12,11 +12,27 @@ import java.util.Map;
  * @author Kathy Morales
  */
 public class TrieNode {
-    Map<Character, TrieNode> children;
-    boolean isEndOfWord;
-
+    private Map<Character, TrieNode> children;
+    private boolean endOfWord;
+    
     public TrieNode() {
         children = new HashMap<>();
-        isEndOfWord = false;
+        endOfWord = false;
+    }
+    
+    public Map<Character, TrieNode> getChildren() {
+        return children;
+    }
+
+    public boolean isEndOfWord() {
+        return endOfWord;
+    }
+
+    public void setEndOfWord(boolean endOfWord) {
+        this.endOfWord = endOfWord;
+    } 
+    
+    public boolean isRoot() {
+        return children.isEmpty();
     }
 }

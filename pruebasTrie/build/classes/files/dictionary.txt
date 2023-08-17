@@ -1,5 +1,6 @@
 app
 apple
+rice
 bat
 batman
 banana
