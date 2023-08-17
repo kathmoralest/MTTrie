@@ -16,6 +16,8 @@ public class TrieNode {
     private boolean endOfWord;
 
     public TrieNode() {
+        children = new HashMap<>();
+        endOfWord = false;
     }
     
     public Map<Character, TrieNode> getChildren() {
@@ -28,6 +30,6 @@ public class TrieNode {
 
     public void setEndOfWord(boolean endOfWord) {
         this.endOfWord = endOfWord;
-    }    
+    }  
 }
 

@@ -1,0 +1,22 @@
+digraph Trie {
+"" -> "a" [label="a"];
+"a" -> "ap" [label="p"];
+"ap" -> "app" [label="p"];
+"app" [shape=box];
+"app" -> "appl" [label="l"];
+"appl" -> "apple" [label="e"];
+"apple" [shape=box];
+"" -> "b" [label="b"];
+"b" -> "ba" [label="a"];
+"ba" -> "bat" [label="t"];
+"bat" [shape=box];
+"bat" -> "batm" [label="m"];
+"batm" -> "batma" [label="a"];
+"batma" -> "batman" [label="n"];
+"batman" [shape=box];
+"ba" -> "ban" [label="n"];
+"ban" -> "bana" [label="a"];
+"bana" -> "banan" [label="n"];
+"banan" -> "banana" [label="a"];
+"banana" [shape=box];
+}

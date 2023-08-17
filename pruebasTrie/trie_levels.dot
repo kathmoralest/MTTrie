@@ -1,0 +1,34 @@
+digraph TrieByLevels {
+  node [shape=box];
+  "ROOT";
+  "ROOT" -> "ROOTa" [label="a"];
+  "ROOTa";
+  "ROOTa" -> "ROOTap" [label="p"];
+  "ROOTap";
+  "ROOTap" -> "ROOTapp" [label="p"];
+  "ROOTapp" [label="ROOTapp", shape=doublecircle];
+  "ROOTapp" -> "ROOTappl" [label="l"];
+  "ROOTappl";
+  "ROOTappl" -> "ROOTapple" [label="e"];
+  "ROOTapple" [label="ROOTapple", shape=doublecircle];
+  "ROOT" -> "ROOTb" [label="b"];
+  "ROOTb";
+  "ROOTb" -> "ROOTba" [label="a"];
+  "ROOTba";
+  "ROOTba" -> "ROOTbat" [label="t"];
+  "ROOTbat" [label="ROOTbat", shape=doublecircle];
+  "ROOTbat" -> "ROOTbatm" [label="m"];
+  "ROOTbatm";
+  "ROOTbatm" -> "ROOTbatma" [label="a"];
+  "ROOTbatma";
+  "ROOTbatma" -> "ROOTbatman" [label="n"];
+  "ROOTbatman" [label="ROOTbatman", shape=doublecircle];
+  "ROOTba" -> "ROOTban" [label="n"];
+  "ROOTban";
+  "ROOTban" -> "ROOTbana" [label="a"];
+  "ROOTbana";
+  "ROOTbana" -> "ROOTbanan" [label="n"];
+  "ROOTbanan";
+  "ROOTbanan" -> "ROOTbanana" [label="a"];
+  "ROOTbanana" [label="ROOTbanana", shape=doublecircle];
+}

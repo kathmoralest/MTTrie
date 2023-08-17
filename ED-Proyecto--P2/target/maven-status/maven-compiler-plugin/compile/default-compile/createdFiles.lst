@@ -1,3 +1,5 @@
+controlador\HomeController.class
+controlador\App.class
 TDAs\Trie.class
 TDAs\TrieNode.class
-.netbeans_automatic_build
+controlador\SecondaryController.class
