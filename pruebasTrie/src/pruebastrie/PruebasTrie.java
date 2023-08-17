@@ -5,6 +5,7 @@
 package pruebastrie;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -17,37 +18,47 @@ public class PruebasTrie {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        Trie trie = new Trie();
-        
         String dictionaryFile = "src/files/dictionary.txt";
+        Trie trie = new Trie();
 
         // Cargar el diccionario desde el archivo
         trie.loadFromFile(dictionaryFile);
-
-        // Insertar palabras ingresadas por el usuario
-        // (asegúrate de mantener las palabras en memoria antes de guardar)        
+        
+        trie.printTrie();
+        
+        // Insertar palabra en el Trie       
         trie.insert("batman");
+        
+        
+        // Insertar palabras ingresadas por el usuario
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese una palabra (o 'salir' para detenerse): ");
+        String input = scanner.nextLine();
+        while (!input.equalsIgnoreCase("salir")) {
+            trie.insert(input);
+            System.out.print("Ingrese otra palabra (o 'salir' para detenerse): ");
+            input = scanner.nextLine();
+        }
         
         // Guardar el diccionario en el archivo
         trie.saveToFile(dictionaryFile);
         
-        // Buscar palabras en el Trie
+        // Buscar palabras en el Trie     
         System.out.println(trie.search("apple"));   // true
         System.out.println(trie.search("app"));     // true
         System.out.println(trie.search("banana"));  // true
         System.out.println(trie.search("bat"));     // true
         System.out.println(trie.search("ball"));    // false
         
+        // Imprimir palabras de el Trie
         trie.printTrie();
         
+        // Crear archivo dot para generar imagen de el Trie
         String dotFilePath = "src/files/trie.dot";
-        trie.generateDotFile(dotFilePath);
-        
         String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";  // Ruta al ejecutable 'dot' de Graphviz
+        trie.generateDotFile(dotFilePath);        
         String inputDotFile = dotFilePath;
         String outputImageFile = "src/images/trie.png";
-
         try {
             Process process = Runtime.getRuntime().exec(dotPath + " -Tpng " + inputDotFile + " -o " + outputImageFile);
             process.waitFor();
@@ -55,10 +66,6 @@ public class PruebasTrie {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        
-        // Antes de la eliminación
-        System.out.println("Antes de la eliminación:");
-        trie.printTrie();
 
         // Eliminar una palabra
         String wordToDelete = "apple";
@@ -68,33 +75,6 @@ public class PruebasTrie {
         System.out.println("Después de la eliminación de '" + wordToDelete + "':");
         trie.printTrie();
         
-        String dotFilePath_e = "src/files/trie_e.dot";
-        trie.generateDotFile(dotFilePath_e);
-        
-        String dotPath_e = "C:\\Program Files\\Graphviz\\bin\\dot.exe";  // Ruta al ejecutable 'dot' de Graphviz
-        String inputDotFile_e = dotFilePath_e;
-        String outputImageFile_e = "src/images/trie_e.png";
-
-        try {
-            Process process = Runtime.getRuntime().exec(dotPath_e + " -Tpng " + inputDotFile_e + " -o " + outputImageFile_e);
-            process.waitFor();
-            System.out.println("Imagen generada: " + outputImageFile_e);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Ingrese una palabra (o 'salir' para detenerse): ");
-        String input = scanner.nextLine();
-
-        while (!input.equalsIgnoreCase("salir")) {
-            trie.insert(input);
-
-            System.out.print("Ingrese otra palabra (o 'salir' para detenerse): ");
-            input = scanner.nextLine();
-        }
-
         System.out.print("Ingrese una palabra para buscar: ");
         String searchWord = scanner.nextLine();
 
@@ -103,11 +83,19 @@ public class PruebasTrie {
         } else {
             System.out.println("La palabra '" + searchWord + "' no está presente en el Trie.");
         }
-     /**
         
+        String prefix = "ba";
+        List<String> suggestions = trie.autocomplete(prefix);
 
-        }*/
+        System.out.println("Sugerencias de autocompletado para '" + prefix + "':");
+        for (String suggestion : suggestions) {
+            System.out.println(suggestion);
+        }
         
+    }
+    
+    public static void generarImagen(){
+    
     }
     
 }
