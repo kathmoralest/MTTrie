@@ -139,7 +139,7 @@ public class Trie {
 
     public void generateDot(TrieNode node, String prefix, FileWriter writer) throws IOException {
         if (node.isEndOfWord()) {
-            writer.write("\"" + prefix + "\" [shape=box];\n");
+            writer.write("\"" + prefix + "\" [shape=circle];\n");
         }
 
         for (Map.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
