@@ -21,7 +21,6 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.Optional;
 import javafx.event.ActionEvent;
-
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
@@ -63,7 +62,6 @@ public class HomeController {
             updateSuggestions(newValue);
             notFoundLabel.setVisible(false);
         });
-        // Configura el evento de selección de sugerencia
         suggestionsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 wordInput.setText(newValue);
@@ -79,40 +77,43 @@ public class HomeController {
             trie.insert(newWord);
             wordsList.setText(wordsList.getText() + "\n" + newWord);
             wordInput.clear();
-            suggestionsListView.getItems().clear(); // Limpia las sugerencias después de agregar
+            suggestionsListView.getItems().clear(); 
         }
     }
 
     @FXML
-private void searchWord(ActionEvent event) {
-    String searchWord = wordInput.getText().trim();
+    private void searchWord(ActionEvent event) {
+        String searchWord = wordInput.getText().trim();
 
-    if (!searchWord.isEmpty()) {
-        try {
-            String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36";
-            Document document = Jsoup.connect("https://dle.rae.es/" + searchWord)
-                .userAgent(userAgent)
-                .get();
+        if (!searchWord.isEmpty()) {
+            boolean wordExistsInWordList = trie.containsNode(searchWord);
 
-            Elements elements = document.select(".j");
-            if (!elements.isEmpty()) {
-                StringBuilder resultText = new StringBuilder();
-                for (Element element : elements) {
-                    String text = element.text();
-                    resultText.append(text).append("\n");
+            if (wordExistsInWordList) {
+                try {
+                    String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36";
+                    Document document = Jsoup.connect("https://dle.rae.es/" + searchWord)
+                            .userAgent(userAgent)
+                            .get();
+
+                    Elements elements = document.select(".j");
+                    if (!elements.isEmpty()) {
+                        StringBuilder resultText = new StringBuilder();
+                        for (Element element : elements) {
+                            String text = element.text();
+                            resultText.append(text).append("\n");
+                        }
+                        showInfoNotification("Resultados de búsqueda para " + searchWord + ":\n" + resultText.toString());
+                    } else {
+                        showInfoNotification("La palabra está en el diccionario pero no hay resultados de búsqueda en la web");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                showInfoNotification("Resultados de búsqueda para "+ searchWord +":\n" + resultText.toString());
             } else {
-                showInfoNotification("La palabra esta en el diccionario pero no hay resultados de busqueda en la web");
+                notFoundLabel.setVisible(true); 
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
-}
-
-
-
 
     @FXML
     private void deleteWord(ActionEvent event) {
@@ -123,7 +124,7 @@ private void searchWord(ActionEvent event) {
 
             if (!wordExists) {
                 showErrorNotification("La palabra no existe en el diccionario");
-                return; // Salir del método si la palabra no existe
+                return; 
             }
 
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -134,7 +135,7 @@ private void searchWord(ActionEvent event) {
             Optional<ButtonType> result = confirmationAlert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                trie.delete(wordToDelete); // Elimina la palabra del árbol
+                trie.delete(wordToDelete); 
 
                 String currentText = wordsList.getText();
                 String newText = currentText.replace("\n" + wordToDelete, "");
@@ -270,42 +271,34 @@ private void searchWord(ActionEvent event) {
     }
 
     @FXML
-private void showTree(MouseEvent event) {
-    String dotFilePath = "resources/graphImage/files/trie.dot"; // Ajusta la ruta según tu estructura de carpetas
-    trie.generateDotFile(dotFilePath);
+    private void showTree(MouseEvent event) {
+        String dotFilePath = "resources/graphImage/files/trie.dot"; 
+        trie.generateDotFile(dotFilePath);
 
-    String dotPath = "resources/graphImage/dot.exe"; // Ruta al ejecutable 'dot' de Graphviz
-    String inputDotFile = dotFilePath;
-    String outputImageFile = "resources/graphImage/trie.png"; // Ruta de salida para la imagen
+        String dotPath = "resources/graphImage/dot.exe"; 
+        String inputDotFile = dotFilePath;
+        String outputImageFile = "resources/graphImage/trie.png"; 
 
-    try {
-        Process process = Runtime.getRuntime().exec(dotPath + " -Tpng " + inputDotFile + " -o " + outputImageFile);
-        process.waitFor();
-        System.out.println("Imagen generada: " + outputImageFile);
-    } catch (IOException | InterruptedException e) {
-        e.printStackTrace();
+        try {
+            Process process = Runtime.getRuntime().exec(dotPath + " -Tpng " + inputDotFile + " -o " + outputImageFile);
+            process.waitFor();
+            System.out.println("Imagen generada: " + outputImageFile);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("Árbol Trie");
+        ImageView imageView = new ImageView(new Image("file:" + outputImageFile));
+        imageView.setPreserveRatio(true);
+
+        ScrollPane scrollPane = new ScrollPane(imageView);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+        Scene scene = new Scene(scrollPane, 800, 600); 
+        stage.setScene(scene);
+        stage.show();
     }
-    // Crear un nuevo Stage para mostrar la imagen generada
-    Stage stage = new Stage();
-    stage.setTitle("Árbol Trie");
-    // Cargar la imagen generada en el ImageView
-    ImageView imageView = new ImageView(new Image("file:" + outputImageFile)); // Ajusta la ruta según tu estructura de carpetas
-    imageView.setPreserveRatio(true);
-
-    // Crear un ScrollPane y agregar el ImageView
-    ScrollPane scrollPane = new ScrollPane(imageView);
-    scrollPane.setFitToWidth(true);
-    scrollPane.setFitToHeight(true);
-
-    // Crear un Scene y agregar el ScrollPane
-    Scene scene = new Scene(scrollPane, 800, 600); // Ajusta el tamaño según tus preferencias
-    stage.setScene(scene);
-
-    // Mostrar el Stage
-    stage.show();
-}
-
-
 
     private void updateSuggestions(String prefix) {
         suggestionsListView.getItems().clear();
