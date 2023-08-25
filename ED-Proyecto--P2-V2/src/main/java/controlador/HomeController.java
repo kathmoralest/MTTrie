@@ -17,14 +17,10 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import TDAs.Trie;
-import TDAs.TrieNode;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.Map;
 import java.util.Optional;
 import javafx.event.ActionEvent;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.SingleGraph;
 
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
@@ -32,11 +28,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.graphstream.ui.fx_viewer.FxViewPanel;
-import org.graphstream.ui.view.Viewer;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -87,18 +84,35 @@ public class HomeController {
     }
 
     @FXML
-    private void searchWord(ActionEvent event) {
-        String searchWord = wordInput.getText().trim();
+private void searchWord(ActionEvent event) {
+    String searchWord = wordInput.getText().trim();
 
-        if (!searchWord.isEmpty()) {
-            boolean wordExists = trie.containsNode(searchWord);
-            if (wordExists) {
-                showInfoNotification("Palabra en el diccionario");
+    if (!searchWord.isEmpty()) {
+        try {
+            String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36";
+            Document document = Jsoup.connect("https://dle.rae.es/" + searchWord)
+                .userAgent(userAgent)
+                .get();
+
+            Elements elements = document.select(".j");
+            if (!elements.isEmpty()) {
+                StringBuilder resultText = new StringBuilder();
+                for (Element element : elements) {
+                    String text = element.text();
+                    resultText.append(text).append("\n");
+                }
+                showInfoNotification("Resultados de búsqueda para "+ searchWord +":\n" + resultText.toString());
             } else {
-                notFoundLabel.setVisible(true);
+                showInfoNotification("La palabra esta en el diccionario pero no hay resultados de busqueda en la web");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+}
+
+
+
 
     @FXML
     private void deleteWord(ActionEvent event) {
