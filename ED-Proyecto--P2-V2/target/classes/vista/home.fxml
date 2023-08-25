@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="444.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.HomeController">
+   <children>
+      <ImageView fx:id="newDic" fitHeight="85.0" fitWidth="85.0" layoutX="14.0" layoutY="14.0" onMouseClicked="#createDictionary" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icons/newDic.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="uplDic" fitHeight="85.0" fitWidth="85.0" layoutX="99.0" layoutY="14.0" onMouseClicked="#uploadDictionary" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icons/upDic.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="saveDic" fitHeight="85.0" fitWidth="85.0" layoutX="184.0" layoutY="14.0" onMouseClicked="#saveDictionary" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icons/dowDic.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="wordsList" layoutX="464.0" layoutY="69.0" prefHeight="354.0" prefWidth="142.0" />
+      <Label alignment="CENTER" layoutX="440.0" layoutY="21.0" prefHeight="48.0" prefWidth="190.0" text="PALABRAS DEL&#10;DICCIONARIO" textAlignment="CENTER" textFill="#230b9e">
+         <font>
+            <Font name="Tw Cen MT Condensed Extra Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="notFoundLabel" layoutX="25.0" layoutY="150.0" prefHeight="17.0" prefWidth="269.0" text="Esta palabra no está en el diccionario. ¡Agrégala!" textFill="red" visible="false" />
+      <TextField fx:id="wordInput" layoutX="24.0" layoutY="167.0" prefHeight="30.0" prefWidth="184.0" />
+      <ListView fx:id="suggestionsListView" layoutX="24.0" layoutY="196.0" prefHeight="100.0" prefWidth="184.0" />
+      <Button fx:id="aggButton" layoutX="218.0" layoutY="167.0" mnemonicParsing="false" onAction="#addWord" prefHeight="30.0" prefWidth="103.0" text="Agregar Palabra" />
+      <Button layoutX="218.0" layoutY="207.0" mnemonicParsing="false" onAction="#searchWord" prefHeight="30.0" prefWidth="103.0" text="Buscar Palabra" />
+      <Button layoutX="218.0" layoutY="246.0" mnemonicParsing="false" onAction="#deleteWord" prefHeight="30.0" prefWidth="103.0" text="Eliminar Palabra" />
+      <Label fx:id="msgLabel" layoutX="71.0" layoutY="214.0" />
+      <ImageView fitHeight="71.0" fitWidth="71.0" layoutX="393.0" layoutY="21.0" onMouseClicked="#showTree" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icons/seeTree.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

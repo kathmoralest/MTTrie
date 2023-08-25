@@ -1,0 +1,10 @@
+node {
+  fill-color: #FF0000; 
+  size: 20px; 
+  text-size: 12px; /
+}
+
+edge {
+  fill-color: #000000; 
+  size: 2px; 
+}
