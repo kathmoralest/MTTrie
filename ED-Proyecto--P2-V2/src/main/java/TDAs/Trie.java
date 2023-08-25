@@ -4,6 +4,8 @@
  */
 package TDAs;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -119,6 +121,32 @@ public class Trie {
 
         for (Map.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
             collectSuggestions(entry.getValue(), prefix + entry.getKey(), suggestions);
+        }
+    }
+    
+    public void generateDotFile(String filename) {
+        try {
+            FileWriter writer = new FileWriter(filename);
+            writer.write("digraph Trie {\n");
+            generateDot(root, "", writer);
+            writer.write("}");
+            writer.close();
+            System.out.println("DOT file generated: " + filename);
+        } catch (IOException e) {
+            System.err.println("Error generating DOT file: " + e.getMessage());
+        }
+    }
+
+    public void generateDot(TrieNode node, String prefix, FileWriter writer) throws IOException {
+        if (node.isEndOfWord()) {
+            writer.write("\"" + prefix + "\" [shape=box];\n");
+        }
+
+        for (Map.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
+            char key = entry.getKey();
+            TrieNode childNode = entry.getValue();
+            writer.write("\"" + prefix + "\" -> \"" + prefix + key + "\" [label=\"" + key + "\"];\n");
+            generateDot(childNode, prefix + key, writer);
         }
     }
     

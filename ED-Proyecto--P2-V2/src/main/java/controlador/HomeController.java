@@ -29,6 +29,9 @@ import org.graphstream.graph.implementations.SingleGraph;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -253,42 +256,42 @@ public class HomeController {
     }
 
     @FXML
-    private void showTree(MouseEvent event) {
-        // Crear un nuevo Stage
-        Stage stage = new Stage();
-        System.setProperty("org.graphstream.ui", "javafx");
-        // Crear el grafo
-        Graph graph = new SingleGraph("Trie");
-        graph.setStrict(false);
-        graph.setAutoCreate(true);
-        showTrie(trie.getRoot(), "", graph);
+private void showTree(MouseEvent event) {
+    String dotFilePath = "resources/graphImage/files/trie.dot"; // Ajusta la ruta según tu estructura de carpetas
+    trie.generateDotFile(dotFilePath);
 
-        // Crear la vista de GraphStream en el FX EDT
-        Viewer viewer = graph.display(false);
-        viewer.enableAutoLayout();
+    String dotPath = "resources/graphImage/dot.exe"; // Ruta al ejecutable 'dot' de Graphviz
+    String inputDotFile = dotFilePath;
+    String outputImageFile = "resources/graphImage/trie.png"; // Ruta de salida para la imagen
 
-        FxViewPanel viewPanel = (FxViewPanel) viewer.addDefaultView(false);
-
-        StackPane pane = new StackPane();
-        pane.getChildren().add(viewPanel);
-
-        stage.setScene(new Scene(pane));
-        stage.show();
+    try {
+        Process process = Runtime.getRuntime().exec(dotPath + " -Tpng " + inputDotFile + " -o " + outputImageFile);
+        process.waitFor();
+        System.out.println("Imagen generada: " + outputImageFile);
+    } catch (IOException | InterruptedException e) {
+        e.printStackTrace();
     }
+    // Crear un nuevo Stage para mostrar la imagen generada
+    Stage stage = new Stage();
+    stage.setTitle("Árbol Trie");
+    // Cargar la imagen generada en el ImageView
+    ImageView imageView = new ImageView(new Image("file:" + outputImageFile)); // Ajusta la ruta según tu estructura de carpetas
+    imageView.setPreserveRatio(true);
 
-    private void showTrie(TrieNode node, String prefix, Graph graph) {
-        if (node.isEndOfWord()) {
-            graph.addNode(prefix).setAttribute("ui.label", prefix);
-        }
+    // Crear un ScrollPane y agregar el ImageView
+    ScrollPane scrollPane = new ScrollPane(imageView);
+    scrollPane.setFitToWidth(true);
+    scrollPane.setFitToHeight(true);
 
-        for (Map.Entry<Character, TrieNode> entry : node.getChildren().entrySet()) {
-            char ch = entry.getKey();
-            TrieNode child = entry.getValue();
-            String newPrefix = prefix + ch;
-            graph.addEdge(prefix + ch, prefix, newPrefix, true);
-            showTrie(child, newPrefix, graph);
-        }
-    }
+    // Crear un Scene y agregar el ScrollPane
+    Scene scene = new Scene(scrollPane, 800, 600); // Ajusta el tamaño según tus preferencias
+    stage.setScene(scene);
+
+    // Mostrar el Stage
+    stage.show();
+}
+
+
 
     private void updateSuggestions(String prefix) {
         suggestionsListView.getItems().clear();
